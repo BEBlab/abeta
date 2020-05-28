@@ -45,12 +45,12 @@ heatmap_df<-rbind(singles_stops[,c("WT_AA", "Mut", "Pos", "sigma", "nscore_c", "
 
 
 #add info fAD
-heatmap_df$box<-NA
+heatmap_df$box<-"VUS"
 heatmap_df[heatmap_df$ID %in% disease_mutations,]$box<-"Dominant"
 heatmap_df[heatmap_df$ID=="A-2-V",]$box<-"Recessive"
 
 #add info syn
-heatmap_df$label<-NA
+heatmap_df$label<-""
 heatmap_df[heatmap_df$ID=="syn",]$label<-"*"
 
 
@@ -122,7 +122,7 @@ syn.df<-data.frame(
 heatmap_fdr<-rbind(heatmap_fdr, syn.df)
 
 #add info syn
-heatmap_fdr$label<-NA
+heatmap_fdr$label<-""
 heatmap_fdr[heatmap_fdr$ID=="syn",]$label<-"*"
 
 
@@ -234,7 +234,7 @@ ggsave(p_position_NS, path=path, file="p_position_NS.pdf", width=4, height=2.5)
 
 ## NS vs clusters
 
-singles$cluster<-NA
+singles$cluster<-""
 singles[singles$Pos %in% c(1,3,7,11,17,22,42),]$cluster<-"gatekeeper"
 singles[singles$Pos %in% c(2,4:6,8:10,12:16,18:21,23:26),]$cluster<-"1_26"
 singles[singles$Pos %in% c(27:41),]$cluster<-"27_41"

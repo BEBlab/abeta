@@ -43,8 +43,8 @@ color_axis=c("D1"="#EE0011FF","A2"="darkgrey","E3"="#EE0011FF","F4"="#9A703EFF",
 
 
 # add info of AA type for WT and Mut;  AA WT+position; and fAD info
-singles$WT_type<-NA
-singles$Mut_type<-NA
+singles$WT_type<-""
+singles$Mut_type<-""
 
 for(i in 1:nrow(singles)){
   singles[i,]$WT_type<-as.character(AA_type[AA_type$AA==singles[i,]$WT_AA,]$type)

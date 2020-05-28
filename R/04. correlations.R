@@ -99,8 +99,8 @@ ggsave(p, path=path, file=paste0(region, "_predictors_wrap.pdf"), width = 6, hei
 
 singles_doubles_properties<-singles_doubles[,c("Pos1", "WT_AA1", "Mut1", "Nmut_codons","sigma", "nscore_c", "Pos2", "WT_AA2", "Mut2", "ID")]
 
-singles_doubles_properties$hydrophobicity<-NA
-singles_doubles_properties$PC1<-NA
+singles_doubles_properties$hydrophobicity<-""
+singles_doubles_properties$PC1<-""
 
 singles_properties<-singles_doubles_properties[singles_doubles_properties$Nmut_codons==1,]
 
@@ -226,7 +226,7 @@ ggsave(p_corr, path=path, file="p_NS_PC1.pdf",width=5, height=4, useDingbats=FAL
 #open 'loadings_properties.RData' 
 
 singles_doubles_solubility<-solubility_dataset
-singles_doubles_solubility$PC1<-NA
+singles_doubles_solubility$PC1<-""
 
 singles_solubility<-singles_doubles_solubility[singles_doubles_solubility$Nmut_codons==1,]
 
@@ -289,6 +289,7 @@ ggsave(p_corr,path=path, file="p_solubility_PC1.pdf",width=5.5, height=4, useDin
 
 kinetics<-left_join(kinetics, singles[,c("ID", "nscore_c", "sigma")], by="ID")
 kinetics<-left_join(kinetics, solubility_dataset[,c("ID", "score")], by="ID")
+kinetics$score<-as.numeric(kinetics$score)
 kinetics[kinetics$ID=="WT", c("nscore_c", "sigma", "score")]<-2.2e-16
 
 # calculate Kn and K2 parameters
