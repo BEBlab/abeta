@@ -1,5 +1,6 @@
 require(ggplot2)
 require(dplyr)
+require(reshape2)
 
 
 dir.create("Modular organisation")
@@ -7,6 +8,7 @@ path="Modular organisation"
 
 #required data:
 load("nscore_df.RData")
+load("yeast_controls.RData")
 
 
 ABseq=c("D","A","E","F","R","H","D","S","G","Y","E","V","H","H","Q","K","L","V","F","F","A","E","D","V","G","S","N","K","G","A","I","I","G","L","M","V","G","G","V","V","I","A")
@@ -203,7 +205,44 @@ p_categories<-ggplot(categories, aes(fill=factor(category, levels=levels), x=fac
   scale_y_continuous(expand = c(0,0))
 p_categories
 
-ggsave(p_categories, path=path, file="p_fdr_categories.pdf",width=12, height=5)
+ggsave(p_categories, path=path, file="p_fdr_categories.pdf",width=12, height=3)
+
+
+
+
+## defining gatekeepers
+
+
+gatekeepers=c()
+
+for (i in 1:42){
+  
+  
+  l_wt<-nrow(subset(fdr_categories, Pos==i & category == "WT-like"))
+  l_inc_1<-nrow(subset(fdr_categories, Pos==i & category == "NS+ 1%"))
+  l_inc_5<-nrow(subset(fdr_categories, Pos==i & category == "NS+ 5%"))
+  l_inc_10<-nrow(subset(fdr_categories, Pos==i & category == "NS+ 10%"))
+  l_inc_25<-nrow(subset(fdr_categories, Pos==i & category == "NS+ 25%"))
+  l_dec_1<-nrow(subset(fdr_categories, Pos==i & category == "NS- 1%"))
+  l_dec_5<-nrow(subset(fdr_categories, Pos==i & category == "NS- 5%"))
+  l_dec_10<-nrow(subset(fdr_categories, Pos==i & category == "NS- 10%"))
+  l_dec_25<-nrow(subset(fdr_categories, Pos==i & category == "NS- 25%"))
+  
+  
+  if((l_inc_1+l_inc_5+l_inc_10)>=(l_dec_1+l_dec_5+l_dec_10)
+     &(l_inc_1+l_inc_5+l_inc_10+l_dec_1+l_dec_5+l_dec_10)>= l_wt
+     
+  ){
+    
+    gatekeepers<-c(gatekeepers, i)  
+    
+  }
+  
+}
+
+gatekeepers
+
+
 
 
 
@@ -236,12 +275,12 @@ ggsave(p_position_NS, path=path, file="p_position_NS.pdf", width=4, height=2.5)
 
 singles$cluster<-""
 singles[singles$Pos %in% c(1,3,7,11,17,22,42),]$cluster<-"gatekeeper"
-singles[singles$Pos %in% c(2,4:6,8:10,12:16,18:21,23:26),]$cluster<-"1_26"
+singles[singles$Pos %in% c(2,4:6,8:10,12:16,18:21,23:26),]$cluster<-"2_26"
 singles[singles$Pos %in% c(27:41),]$cluster<-"27_41"
 
 
-p_clusters<-ggplot(singles, aes(x=factor(cluster, levels=c("gatekeeper", "1_26", "27_41"),
-                                    labels=c("Gatekeepers\n(D1, E3, D7, E11,\nL17, E22 & A42)", "Nt (1-26)", "Ct (27-41)" )), y=nscore_c))+
+p_clusters<-ggplot(singles, aes(x=factor(cluster, levels=c("gatekeeper", "2_26", "27_41"),
+                                    labels=c("Gatekeepers\n(D1, E3, D7, E11,\nL17, E22 & A42)", "Nt (2-26)", "Ct (27-41)" )), y=nscore_c))+
   geom_hline(yintercept = 0, size=0.2)+
   geom_violin(size=0.3)+
     theme_bw()+
@@ -258,5 +297,26 @@ p_clusters<-ggplot(singles, aes(x=factor(cluster, levels=c("gatekeeper", "1_26",
 p_clusters
 ggsave(p_clusters,path=path, file="p_NS_clusters.pdf", width=3, height=2.5)
 
+
+
+
+## controls yeast growth AB and SupN
+
+melt_controls<-melt(yeast_controls, id.vars = "variant")
+
+p_controls<-ggplot(melt_controls, aes(x=factor(variant, levels=c("supN", "AB", "supN-AB")), y=value))+
+
+  theme_bw()+
+  geom_jitter(width=0.2, size=3, aes(color=variant), show.legend = F)+
+  scale_color_manual(values=c("darkblue","grey70","#15983DFF"))+
+  theme(axis.title.x=element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color="black", size=0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+  labs(y="Nucleation score")
+
+p_controls
+ggsave(p_controls,path=path, file="p_yeast_controls.pdf", width=3, height=2.5)
 
 

@@ -4,7 +4,6 @@ require(weights)
 require(ggplot2)
 require(hexbin)
 
-
 dir.create("Correlations")
 path="Correlations"
 
@@ -17,10 +16,11 @@ load("kinetics.RData")
 
 
 
+
 ### aggregation predictors correlation plots
 
 list<-list(
-  "Nt (1_26)"=c(2,4:6,8:10,12:16,18:21,24:26),
+  "Nt (2_26)"=c(2,4:6,8:10,12:16,18:21,24:26),
   "Ct (27_41)"=c(27:41)
 )
 
@@ -143,7 +143,7 @@ singles_doubles_properties<-rbind(singles_properties, doubles_properties)
 ### plot NS vs hydrophobicity (Nt and Ct)
 
 list<-list(
-  "Nt (1_26)"=c(2,4:6,8:10,12:16,18:21,24:26),
+  "Nt (2_26)"=c(2,4:6,8:10,12:16,18:21,24:26),
   "Ct (27_41)"=c(27:41)
 )
 
@@ -413,7 +413,6 @@ p_kinetics_solubility<-ggplot(melt_kinetics, aes(x=as.numeric(value), y=as.numer
 p_kinetics_solubility  
 
 ggsave(p_kinetics_solubility,path=path, file="p_kinetics_solubility.pdf",width=12, height=6, useDingbats=FALSE)
-
 
 
 

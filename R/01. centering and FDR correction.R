@@ -110,7 +110,7 @@ p_hist<-ggplot(dist, aes(x=nscore_c))+
   geom_vline(aes(xintercept=0), color="black", linetype="dashed", size=0.5)+
   theme_bw()+
  #scale_fill_manual(values=c("grey70", "grey40", "grey2"))+
-  scale_fill_manual(values=c("grey70", "darkblue","#6666b9"))+
+  scale_fill_manual(values=c("grey70", "darkblue","#15983DFF"))+
   labs(x="Nucleation score", y="Counts")+
   theme(legend.position = c(0.3,0.8),
         legend.text = element_text(size=18),

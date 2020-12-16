@@ -280,7 +280,7 @@ p_AA<-ggplot(singles, aes(x = factor(names, levels=ABseq, labels=labels_ABseq), 
 ### boxplots to each Mut AA
 
 list<-list(
-  "Nt (1-26)"=c(2,4:6,8:10,12:16,18:21,24:26),
+  "Nt (2-26)"=c(2,4:6,8:10,12:16,18:21,24:26),
   "Ct (27-41)"=c(27:41),
   "Negatively charged gatekeepers"=c(1,3,7,11,22),
   "Negatively charged positions"=c(1,3,7,11,22,23)
