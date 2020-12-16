@@ -10,6 +10,9 @@ path="Centering and FDR correction"
 
 #required data:
 #excel file MS_BL_BB_processed_data.xlsx
+#deposited in NCBI's Gene Expression Omnibus (GEO) as record GSE151147 
+
+
 
 #import data
 silent<-read_excel("MS_BL_BB_processed_data.xlsx", sheet="synonymous")
