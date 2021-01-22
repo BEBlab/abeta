@@ -11,6 +11,7 @@ load("nscore_df.RData")
 load("yeast_controls.RData")
 
 
+
 ABseq=c("D","A","E","F","R","H","D","S","G","Y","E","V","H","H","Q","K","L","V","F","F","A","E","D","V","G","S","N","K","G","A","I","I","G","L","M","V","G","G","V","V","I","A")
 ABseq_pos=c("D\n1","A\n2","E\n3","F\n4","R\n5","H\n6","D\n7","S\n8","G\n9","Y\n10","E\n11","V\n12","H\n13","H\n14","Q\n15","K\n16","L\n17","V\n18","F\n19","F\n20","A\n21","E\n22","D\n23","V\n24","G\n25","S\n26","N\n27","K\n28","G\n29","A\n30","I\n31","I\n32","G\n33","L\n34","M\n35","V\n36","G\n37","G\n38","V\n39","V\n40","I\n41","A\n42")
 vectorAA <- c("G","A","V","L","M","I","F","Y","W","K","R","D","E","S","T","C","N","Q","H", "P", "*")
@@ -75,9 +76,12 @@ p_heatmap<-ggplot(heatmap_df)+
         axis.text.y = element_text(color=color_axis_y, size=12),
         axis.title = element_text(size = 20))+
   geom_text(aes(Pos,factor(Mut, levels=rev(vectorAA)),label=label), size=8)+
+  scale_fill_gradient2(low="darkorange2",mid= "lightgrey", high="darkblue",
+                       breaks=c(-4, -2, 0, 2),  na.value = "white", 
+                       limits = c(min(heatmap_df$nscore_c), max(heatmap_df$nscore_c))) +
   
-  scale_fill_gradientn(colours=c("darkorange2", "#f5ad66", "lightgrey", "darkblue"), breaks=c(-4, -2, 0, 2),
-                       na.value = "white") +
+ # scale_fill_gradientn(colours=c("darkorange2", "#f5ad66", "lightgrey", "darkblue"), breaks=c(-4, -2, 0, 2),
+  #                     na.value = "white") +
   scale_color_manual(values=c("#EE0011FF","#9A703EFF", NA), 
                      labels=c("Dominant",  "Recessive", ""), name=""  )
 p_heatmap
@@ -314,9 +318,13 @@ p_controls<-ggplot(melt_controls, aes(x=factor(variant, levels=c("supN", "AB", "
         axis.line = element_line(color="black", size=0.5),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
-  labs(y="Nucleation score")
+  labs(y="% -Ade growth")
 
 p_controls
 ggsave(p_controls,path=path, file="p_yeast_controls.pdf", width=3, height=2.5)
+
+
+
+
 
 

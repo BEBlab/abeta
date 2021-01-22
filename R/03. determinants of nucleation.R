@@ -7,13 +7,14 @@ path="Determinants of A-beta nucleation"
 
 #required data:
 load("nscore_df.RData")
+load("truncations")
 
 
 AA_type<-data.frame("AA"= c("G","A","V","L","M","I","F","Y","W","K","R","D","E","S","T","C","N","Q","H", "P" ),
                    "name_AA"=c("Glycine", "Alanine","Valine","Leucine","Methionine","Isoleucine","Phenylalanine",
                    "Tyrosine","Tryptophan","Lysine","Arginine","Aspartic acid","Glutamic acid","Serine","Threonine",
                    "Cysteine","Asparagine","Glutamine","Histidine","Proline"),
-                    "type"=c("glycine",rep("aliphatic",5),rep("aromatic",3),rep("positive",2), "polar",rep("negative",2),rep("polar",5),"proline"))
+                    "type"=c("glycine",rep("aliphatic",5),rep("aromatic",3),rep("positive",2),rep("negative",2),rep("polar",6),"proline"))
 ABseq=c("D1","A2","E3","F4","R5","H6","D7","S8","G9","Y10","E11","V12","H13","H14","Q15","K16","L17","V18","F19","F20","A21","E22","D23","V24","G25","S26","N27","K28","G29","A30","I31","I32","G33","L34","M35","V36","G37","G38","V39","V40","I41","A42")
 
 labels_ABseq=c("D\n1","A\n2","E\n3","F\n4","R\n5","H\n6","D\n7","S\n8","G\n9","Y\n10",
@@ -315,4 +316,29 @@ ggsave(p,path = path, file=paste0(region, "_to_MutAA_boxplot.pdf"), width = 8, h
 
   
 }
+
+
+
+
+
+## truncations
+
+melt_trunc<-melt(truncations, id.vars = "variant")
+
+p_trunc<-ggplot(melt_trunc, aes(x=factor(variant, levels=c("supN", "supN-AB","supN-AB(22-42)","supN-AB(24-42)","supN-AB(27-42)" )), y=value))+
+  
+  theme_bw()+
+  geom_jitter(width=0.2, size=3, aes(color=variant), show.legend = F)+
+  scale_color_manual(values=c("grey","#15983DFF", rep("darkblue", 3)))+
+  theme(axis.title.x=element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color="black", size=0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x=element_text(angle=45, vjust = 1, hjust=1))+
+  labs(y="% -Ade growth")
+
+p_trunc
+ggsave(p_trunc,file="p_yeast_trunc.pdf", width=3, height=3)
+
 
